@@ -188,7 +188,7 @@ impl Display for HttpResponse {
   fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
     let reason = map_http_status_reason(&self.status_code);
 
-    write!(fmt, "{} {} {reason}", self.version, self.status_code as u16);
+    write!(fmt, "{} {} {reason} {CRLF}", self.version, self.status_code as u16);
 
     if (&self.headers).is_some() {
       let headers_strings: Vec<String> = self.headers
@@ -199,11 +199,11 @@ impl Display for HttpResponse {
         .collect();
   
       if headers_strings.len() != 0 {
-        write!(fmt, "{CRLF}{}", headers_strings.join(" "));
+        write!(fmt, "{}", headers_strings.join("{CRLF}"));
       }
     }
 
-    write!(fmt, "{CRLF}{CRLF}");
+    write!(fmt, "{CRLF}");
 
     if self.body.is_some() {
       write!(fmt, "{}", self.body.as_ref().unwrap());
